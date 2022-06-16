@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('users/login', [UserController::class, 'showLogin'])->name('users.showLogin');
+Route::post('users/login', 'App\Http\Controllers\UserController@login')->name('users.login');
+
+Route::get('users/register', [UserController::class, 'showRegister'])->name('users.showRegister');
+Route::post('users/register', [UserController::class, 'register'])->name('users.register');
+
+Route::resource('users', UserController::class);
+
+Route::resource('tasks', TaskController::class);
