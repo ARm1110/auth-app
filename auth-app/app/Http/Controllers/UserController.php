@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequestValidation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -107,13 +108,15 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $user =  User::select('*')->where('email', $request->email)
-            ->where('password', $request->password)->get();
+        $credentials = $request->only('email', 'password');
 
-
-        if ($user) {
-            session()->put('user_id', $user->first()->id);
-            return redirect()->back();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('home');
         }
+
+        // dd(Auth::attempt($credentials));
+
+        return back(302)->withInput()->with('error', 'Invalid credentials');
     }
 }

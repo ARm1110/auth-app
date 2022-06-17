@@ -1,5 +1,11 @@
  @extends('layouts.layout')
  @section('content')
+     @if (session('error'))
+         <div class="alert alert-danger">
+             {{ session('error') }}
+         </div>
+     @endif
+
      <form action="{{ route('users.login') }}" method="POST">
          @csrf
          <div class="mb-3 mt-3">
@@ -15,4 +21,5 @@
 
          <button type="submit" class="btn btn-primary">Submit</button>
      </form>
+   
  @endsection
